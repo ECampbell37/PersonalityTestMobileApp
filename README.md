@@ -1,50 +1,63 @@
-# Welcome to your Expo app 👋
+# 🧠 Personality Test Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Welcome to the **Personality Test Mobile App**, a beautifully designed React Native app that helps users explore their personalities through the Big Five personality traits (OCEAN model).
 
-## Get started
+## 🚀 Features
 
-1. Install dependencies
+- 📊 Take a 50-question Big Five personality test (O, C, E, A, N)
+- 🎨 Clean, intuitive interface with a smooth quiz experience
+- 📘 Learn about the traits and your strengths with friendly visuals
+- 👤 Create an account and view your results history
+- 📱 Responsive layout designed for mobile
+- 🔒 Firebase authentication and Firestore database integration
 
-   ```bash
-   npm install
-   ```
+## 📷 Screenshots
 
-2. Start the app
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="screenshots/welcome.png" width="200" />
+  <img src="screenshots/test.png" width="200" />
+  <img src="screenshots/test2.png" width="200" />
+  <img src="screenshots/login.png" width="200" />
+  <img src="screenshots/signup.png" width="200" />
+  <img src="screenshots/account.png" width="200" />
+  <img src="screenshots/history.png" width="200" />
+  <img src="screenshots/results.png" width="200" />
+  <img src="screenshots/results2.png" width="200" />
+  <img src="screenshots/traits.png" width="200" />
+  <img src="screenshots/traits2.png" width="200" />
+</div>
 
-   ```bash
-    npx expo start
-   ```
+## 🛠️ Tech Stack
 
-In the output, you'll find options to open the app in a
+- **React Native** with Expo
+- **Firebase** (Auth + Firestore)
+- TypeScript & React Navigation
+- Styled with React Native `StyleSheet`
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## 🧪 How to Run Locally
 
 ```bash
-npm run reset-project
+git clone https://github.com/ECampbell37/PersonalityTestMobileApp.git
+cd PersonalityTestMobileApp
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Make sure you have Expo CLI installed: `npm install -g expo-cli`
 
-## Learn more
+## 📁 Folder Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+/screens       → All screen components (Test, Results, Welcome, etc.)
+/src           → Firebase config and question logic
+/assets        → App images and icons
+/screenshots   → Screenshots for README
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 📄 License
 
-## Join the community
+This project is licensed under the MIT License. Feel free to fork and build on top of it.
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Made by Elijah Campbell-Ihim
