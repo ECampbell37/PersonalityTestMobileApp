@@ -14,17 +14,17 @@ Welcome to the **Personality Test Mobile App**, a beautifully designed React Nat
 ## 📷 Screenshots
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-  <img src="screenshots/welcome.png" width="200" />
-  <img src="screenshots/test.png" width="200" />
-  <img src="screenshots/test2.png" width="200" />
-  <img src="screenshots/login.png" width="200" />
-  <img src="screenshots/signup.png" width="200" />
-  <img src="screenshots/account.png" width="200" />
-  <img src="screenshots/history.png" width="200" />
-  <img src="screenshots/results.png" width="200" />
-  <img src="screenshots/results2.png" width="200" />
-  <img src="screenshots/traits.png" width="200" />
-  <img src="screenshots/traits2.png" width="200" />
+  <img src="screenshots/welcome.PNG" width="250" />
+  <img src="screenshots/test1.PNG" width="250" />
+  <img src="screenshots/test2.PNG" width="250" />
+  <img src="screenshots/login.PNG" width="250" />
+  <img src="screenshots/signup.PNG" width="250" />
+  <img src="screenshots/account.PNG" width="250" />
+  <img src="screenshots/history.PNG" width="250" />
+  <img src="screenshots/results.PNG" width="250" />
+  <img src="screenshots/results2.PNG" width="250" />
+  <img src="screenshots/traits.PNG" width="250" />
+  <img src="screenshots/traits2.PNG" width="250" />
 </div>
 
 ## 🛠️ Tech Stack
