@@ -1,6 +1,6 @@
 # 🧠 Personality Test Mobile App
 
-Welcome to the **Personality Test Mobile App**, a beautifully designed React Native app that helps users explore their personalities through the Big Five personality traits (OCEAN model).
+Welcome to the **Personality Test Mobile App**, a custom-designed React Native app that helps users explore their personalities through the Big Five personality traits (OCEAN model).
 
 ## 🚀 Features
 
@@ -54,10 +54,8 @@ Make sure you have Expo CLI installed: `npm install -g expo-cli`
 /screenshots   → Screenshots for README
 ```
 
-## 📄 License
-
-This project is licensed under the MIT License. Feel free to fork and build on top of it.
-
 ---
 
-Made by Elijah Campbell-Ihim
+Made by [Elijah Campbell-Ihim](https://github.com/ECampbell37) for my Mobile Development Course
+
+---
