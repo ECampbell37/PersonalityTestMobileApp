@@ -1,18 +1,40 @@
+/************************************************************
+ * Name:    Elijah Campbell‑Ihim
+ * Project: Personality Test Mobile App (Final Project)
+ * Class:   CMPS-285 Mobile Development
+ * Date:    April 2025
+ * File:    /screens/WelcomeScreen.tsx
+ ************************************************************/
+
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 
+
+/**
+ * WelcomeScreen Component
+ *
+ * Displays the main screen of the app.
+ * Introduces the test, shows a visual banner, and offers navigation to the test or sign-up.
+ *
+ * Props:
+ * - navigation: navigation object provided by React Navigation
+ */
 const WelcomeScreen = ({ navigation }: any) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* Hero image banner */}
       <Image source={require('../assets/hero.jpg')} style={styles.heroImage} resizeMode="cover" />
 
+      {/* App title */}
       <Text style={styles.title}>Discover Your True Self</Text>
 
+      {/* Description and app purpose */}
       <Text style={styles.description}>
         Welcome to your own personalized personality app! Unlock the secrets of your personality and uncover what makes you uniquely you.
         Take a fun and insightful quiz to explore your inner world — and track your growth over time!
       </Text>
 
+      {/* Call-to-action button to begin the personality test */}
       <TouchableOpacity
         style={styles.ctaButton}
         onPress={() => navigation.navigate('Test', { page: 1, answers: [] })}
@@ -21,6 +43,7 @@ const WelcomeScreen = ({ navigation }: any) => {
         <Text style={styles.ctaButtonText}>📝 Take the Test</Text>
       </TouchableOpacity>
 
+      {/* Signup prompt for account creation */}
       <View style={styles.signupContainer}>
         <Text style={styles.signupPrompt}>Want to save your results?</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>

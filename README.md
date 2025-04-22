@@ -2,6 +2,14 @@
 
 Welcome to the **Personality Test Mobile App**, a custom-designed React Native app that helps users explore their personalities through the Big Five personality traits (OCEAN model).
 
+The Big Five (OCEAN) model measures:
+- **Openness** (creativity & curiosity)
+- **Conscientiousness** (organization & discipline)
+- **Extraversion** (sociability & energy)
+- **Agreeableness** (kindness & empathy)
+- **Neuroticism** (emotional stability)
+
+
 ## 🚀 Features
 
 - 📊 Take a 50-question Big Five personality test (O, C, E, A, N)
@@ -13,19 +21,18 @@ Welcome to the **Personality Test Mobile App**, a custom-designed React Native a
 
 ## 📷 Screenshots
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-  <img src="screenshots/welcome.PNG" width="250" />
-  <img src="screenshots/test1.PNG" width="250" />
-  <img src="screenshots/test2.PNG" width="250" />
-  <img src="screenshots/login.PNG" width="250" />
-  <img src="screenshots/signup.PNG" width="250" />
-  <img src="screenshots/account.PNG" width="250" />
-  <img src="screenshots/history.PNG" width="250" />
-  <img src="screenshots/results.PNG" width="250" />
-  <img src="screenshots/results2.PNG" width="250" />
-  <img src="screenshots/traits.PNG" width="250" />
-  <img src="screenshots/traits2.PNG" width="250" />
-</div>
+| Welcome | Quiz | Quiz Continued |
+|--------|------|----------------|
+| ![Welcome](screenshots/welcome.PNG) | ![Test1](screenshots/test1.PNG) | ![Test2](screenshots/test2.PNG) |
+
+| Login | Sign Up | Profile |
+|-------|---------|---------|
+| ![Login](screenshots/login.PNG) | ![SignUp](screenshots/signup.PNG) | ![Account](screenshots/account.PNG) |
+
+| History | Results | Trait Info |
+|---------|---------|------------|
+| ![History](screenshots/history.PNG) | ![Results](screenshots/results.PNG) | ![Traits](screenshots/traits.PNG) |
+
 
 ## 🛠️ Tech Stack
 
@@ -44,6 +51,8 @@ npx expo start
 ```
 
 Make sure you have Expo CLI installed: `npm install -g expo-cli`
+
+> 🔐 **Note:** You must configure your own Firebase project and replace the `firebase.ts` config file with your credentials.
 
 ## 📁 Folder Structure
 

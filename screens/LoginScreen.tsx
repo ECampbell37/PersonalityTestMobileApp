@@ -1,11 +1,26 @@
+/************************************************************
+ * Name:    Elijah Campbell‑Ihim
+ * Project: Personality Test Mobile App (Final Project)
+ * Class:   CMPS-285 Mobile Development
+ * Date:    April 2025
+ * File:    /screens/LoginScreen.tsx
+ ************************************************************/
+
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, ScrollView } from 'react-native';
 import { firebase } from '../src/firebase';
 
+/**
+ * LoginScreen Component
+ *
+ * Handles user login with Firebase Authentication.
+ * Allows navigation to the SignUp screen if the user doesn't have an account.
+ */
 const LoginScreen = ({ navigation }: any) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');  // Stores input email
+  const [password, setPassword] = useState('');  // Stores input password
 
+  // Handles login logic and navigates to Profile screen on success
   const handleLogin = () => {
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(() => navigation.navigate('Profile'))
@@ -16,6 +31,7 @@ const LoginScreen = ({ navigation }: any) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Welcome Back</Text>
 
+      {/* Email Input Field */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Email Address</Text>
         <TextInput
@@ -29,6 +45,7 @@ const LoginScreen = ({ navigation }: any) => {
         />
       </View>
 
+      {/* Password Input Field */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Password</Text>
         <TextInput
@@ -41,10 +58,12 @@ const LoginScreen = ({ navigation }: any) => {
         />
       </View>
 
+      {/* Login Button */}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Log In</Text>
       </TouchableOpacity>
 
+      {/* Navigation Link to Sign Up */}
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={styles.linkContainer}>
         <Text style={styles.linkText}>Don’t have an account? <Text style={styles.linkBold}>Sign Up</Text></Text>
       </TouchableOpacity>

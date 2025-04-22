@@ -1,5 +1,20 @@
-// questions.tsx
+/************************************************************
+ * Name:    Elijah Campbell‑Ihim
+ * Project: Personality Test Mobile App (Final Project)
+ * Class:   CMPS-285 Mobile Development
+ * Date:    April 2025
+ * File:    /src/questions.tsx
+ ************************************************************/
 
+
+/**
+ * List of 50 Big Five personality test statements.
+ * Each object contains:
+ * - `id`: The question number (1–50)
+ * - `text`: The personality trait statement shown in the quiz
+ *
+ * These items are displayed 10 per page in the TestScreen.
+ */
 export const questions = [
   { id: 1, text: 'Am the life of the party.' },
   { id: 2, text: 'Feel little concern for others.' },

@@ -1,3 +1,11 @@
+/************************************************************
+ * Name:    Elijah Campbell‑Ihim
+ * Project: Personality Test Mobile App (Final Project)
+ * Class:   CMPS-285 Mobile Development
+ * Date:    April 2025
+ * File:    /screens/ProfileScreen.tsx
+ ************************************************************/
+
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -11,15 +19,24 @@ import {
 import { firebase } from '../src/firebase';
 import { Ionicons } from '@expo/vector-icons';
 
+
+/**
+ * ProfileScreen Component
+ *
+ * Displays user profile info (email), allows logout, and shows test history.
+ * Connects to Firebase Auth and Firestore to load past quiz attempts in real time.
+ */
 const ProfileScreen = ({ navigation }: any) => {
   const [user, setUser] = useState<any>(null);
   const [testHistory, setTestHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch authenticated user and test history on mount
   useEffect(() => {
     const unsubscribeAuth = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
+        // Subscribe to test history updates
         const unsubscribeTests = firebase
           .firestore()
           .collection('users')
@@ -49,6 +66,7 @@ const ProfileScreen = ({ navigation }: any) => {
     return () => unsubscribeAuth();
   }, [navigation]);
 
+  // Logout user and return to welcome screen
   const handleLogout = () => {
     firebase
       .auth()
@@ -57,6 +75,7 @@ const ProfileScreen = ({ navigation }: any) => {
       .catch((error) => Alert.alert('Logout Error', error.message));
   };
 
+  // Render a single test card from history
   const renderTestHistoryItem = ({ item, index }: { item: any; index: number }) => {
     const date = item.createdAt
       ? item.createdAt.toDate().toLocaleDateString()
@@ -99,10 +118,12 @@ const ProfileScreen = ({ navigation }: any) => {
     );
   };
 
+  // Renders the profile section and optional loading/empty state
   const ListHeader = () => (
     <View style={styles.headerContainer}>
       <Text style={styles.title}>Account Page</Text>
 
+      {/* Authenticated user's email and logout option */}
       {user && (
         <View style={styles.profileCard}>
           <Ionicons
@@ -126,12 +147,14 @@ const ProfileScreen = ({ navigation }: any) => {
         </View>
       )}
 
+      {/* Divider before test history section */}
       <View style={styles.sectionDivider}>
         <View style={styles.dividerLine} />
         <Text style={styles.dividerLabel}>🎉 Your Personality Tests</Text>
         <View style={styles.dividerLine} />
       </View>
 
+      {/* Loading or empty history message */}
       {loading && (
         <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 20 }} />
       )}

@@ -1,7 +1,23 @@
-// screens/TraitInfoScreen.tsx
+/************************************************************
+ * Name:    Elijah Campbell‑Ihim
+ * Project: Personality Test Mobile App (Final Project)
+ * Class:   CMPS-285 Mobile Development
+ * Date:    April 2025
+ * File:    /screens/TraitInfoScreen.tsx
+ ************************************************************/
+
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 
+/**
+ * List of Big Five personality traits with descriptions
+ * - label: trait name
+ * - emoji: icon for visual flair
+ * - color: trait's theme color
+ * - description: one-line summary
+ * - high: what high scores indicate
+ * - low: what low scores indicate
+ */
 const traits = [
   {
     label: 'Openness',
@@ -45,10 +61,19 @@ const traits = [
   },
 ];
 
+
+/**
+ * TraitInfoScreen Component
+ *
+ * Displays detailed descriptions for each of the Big Five traits.
+ * Used to educate users after completing the test.
+ */
 const TraitInfoScreen = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
       <Text style={styles.title}>About the Big Five Traits</Text>
+
+      {/* Render a card for each personality trait */}
       {traits.map((trait) => (
         <View key={trait.label} style={styles.traitCard}>
           <Text style={[styles.traitTitle, { color: trait.color }]}>

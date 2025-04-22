@@ -1,3 +1,12 @@
+/************************************************************
+ * Name:    Elijah Campbell‑Ihim
+ * Project: Personality Test Mobile App (Final Project)
+ * Class:   CMPS-285 Mobile Development
+ * Date:    April 2025
+ * File:    /screens/TestScreen.tsx
+ ************************************************************/
+
+// React and React Native imports
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -7,18 +16,48 @@ import {
   StyleSheet,
   ScrollView
 } from 'react-native';
+
+// Import local test questions data
 import { questions } from '../src/questions';
 
+// Constant for separating questions into pages
 const QUESTIONS_PER_PAGE = 10;
 
+
+/**
+ * TestScreen Component
+ *
+ * Props:
+ * - route: navigation route (includes page number and previous answers)
+ * - navigation: allows moving to next/previous test screens or results
+ *
+ * State:
+ * - pageAnswers: stores answers for the current set of 10 questions
+ *
+ * Features:
+ * - Separates the test questions into pages(10 per page)
+ * - Allows rating selection for each question (1 to 5)
+ * - Navigation to next or previous test screen
+ * - Ensures all questions are answered before proceeding
+ */
 const TestScreen = ({ route, navigation }: any) => {
   const { page, answers } = route.params;
+
+  // Local answers for current page
   const [pageAnswers, setPageAnswers] = useState<number[]>(Array(QUESTIONS_PER_PAGE).fill(null));
+
+  // Ref to allow scrolling back to top when changing pages
   const scrollRef = useRef<ScrollView>(null);
 
+  // Calculate question slice for current page
   const startIndex = (page - 1) * QUESTIONS_PER_PAGE;
   const currentQuestions = questions.slice(startIndex, startIndex + QUESTIONS_PER_PAGE);
 
+   /**
+   * On mount or page change:
+   * - Load previously saved answers for this page if any
+   * - Scroll to top with animation
+   */
   useEffect(() => {
     const existing = answers.slice(startIndex, startIndex + QUESTIONS_PER_PAGE);
     setPageAnswers(existing.length ? existing : Array(QUESTIONS_PER_PAGE).fill(null));
@@ -33,12 +72,19 @@ const TestScreen = ({ route, navigation }: any) => {
     return () => clearTimeout(timeout);
   }, [answers, startIndex]);
 
+
+   /**
+   * Update answer for a specific question when the user clicks on it
+   */
   const handleSelect = (index: number, rating: number) => {
     const newAnswers = [...pageAnswers];
     newAnswers[index] = rating;
     setPageAnswers(newAnswers);
   };
 
+  /**
+  * Validate answers and proceed to the next page or results screen
+  */
   const handleNext = () => {
     if (pageAnswers.some(answer => answer === null)) {
       Alert.alert('Incomplete', 'Please answer all questions before proceeding.');
@@ -57,6 +103,10 @@ const TestScreen = ({ route, navigation }: any) => {
     }
   };
 
+
+  /**
+  * Go back to the previous page (if not on the first)
+  */
   const handlePrevious = () => {
     const updatedAnswers = [...answers];
     for (let i = 0; i < QUESTIONS_PER_PAGE; i++) {
@@ -75,12 +125,15 @@ const TestScreen = ({ route, navigation }: any) => {
         contentContainerStyle={styles.scrollContent}
         stickyHeaderIndices={[1]}
       >
+
+        {/* Instructions text */}
         <View style={styles.descriptionContainer}>
           <Text style={styles.description}>
             Rank each statement on how well it describes you. Use a scale from 1 (strongly disagree) to 5 (strongly agree). Each statement reads as follows: "I ..."
           </Text>
         </View>
 
+        {/* Answer Scale Labels */}
         <View style={styles.labelContainer}>
           <View style={styles.labelLine}>
             <Text style={styles.labelLeft}>Strongly Disagree</Text>
@@ -88,6 +141,7 @@ const TestScreen = ({ route, navigation }: any) => {
           </View>
         </View>
 
+        {/* Render each question with rating buttons */}
         {currentQuestions.map((item, index) => (
           <View key={item.id} style={styles.questionContainer}>
             <Text style={styles.questionText}>
@@ -111,6 +165,7 @@ const TestScreen = ({ route, navigation }: any) => {
         ))}
       </ScrollView>
 
+      {/* Navigation buttons */}
       <View style={styles.footer}>
         <TouchableOpacity onPress={handlePrevious} disabled={page === 1} style={styles.footerButton}>
           <Text style={[styles.footerText, page === 1 && styles.disabledText]}>Previous</Text>

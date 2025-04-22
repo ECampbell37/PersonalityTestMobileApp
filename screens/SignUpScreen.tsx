@@ -1,12 +1,31 @@
+/************************************************************
+ * Name:    Elijah Campbell‑Ihim
+ * Project: Personality Test Mobile App (Final Project)
+ * Class:   CMPS-285 Mobile Development
+ * Date:    April 2025
+ * File:    /screens/SignUpScreen.tsx
+ ************************************************************/
+
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, ScrollView } from 'react-native';
 import { firebase } from '../src/firebase';
 
-const SignUpScreen = ({ navigation }: any) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
+/**
+ * SignUpScreen Component
+ *
+ * Allows new users to create an account using Firebase Authentication.
+ * Checks password confirmation before proceeding.
+ */
+const SignUpScreen = ({ navigation }: any) => {
+  const [email, setEmail] = useState('');  // User email input
+  const [password, setPassword] = useState('');  // User password input
+  const [confirmPassword, setConfirmPassword] = useState('');  // Password confirmation
+
+  /**
+  * Handles user sign-up with validation and Firebase Auth.
+  * Redirects to the Profile screen on successful registration.
+  */
   const handleSignUp = () => {
     if (password !== confirmPassword) {
       Alert.alert('Error', 'Passwords do not match.');
@@ -22,6 +41,7 @@ const SignUpScreen = ({ navigation }: any) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Create Your Account</Text>
 
+      {/* Email Input Field */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Email Address</Text>
         <TextInput
@@ -35,6 +55,7 @@ const SignUpScreen = ({ navigation }: any) => {
         />
       </View>
 
+      {/* Password Input Field */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Password</Text>
         <TextInput
@@ -47,6 +68,7 @@ const SignUpScreen = ({ navigation }: any) => {
         />
       </View>
 
+      {/* Confirm Password Input Field */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Confirm Password</Text>
         <TextInput
@@ -59,10 +81,12 @@ const SignUpScreen = ({ navigation }: any) => {
         />
       </View>
 
+      {/* Sign Up Button */}
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
 
+      {/* Navigation Link to Login */}
       <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.linkContainer}>
         <Text style={styles.linkText}>Already have an account? <Text style={styles.linkBold}>Log In</Text></Text>
       </TouchableOpacity>
