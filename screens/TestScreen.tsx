@@ -174,7 +174,9 @@ const TestScreen = ({ route, navigation }: any) => {
           <Text style={styles.pageNumber}>Page {page}</Text>
         </View>
         <TouchableOpacity onPress={handleNext} style={styles.footerButton}>
-          <Text style={styles.footerText}>Next</Text>
+          <Text style={styles.footerText}>
+            {page === Math.ceil(questions.length / QUESTIONS_PER_PAGE) ? 'Submit' : 'Next'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
