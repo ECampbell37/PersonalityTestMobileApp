@@ -10,6 +10,11 @@ The Big Five (OCEAN) model measures:
 - **Neuroticism** (emotional stability)
 
 
+## 🙏 Updates
+- ✅ Now allows users to delete previous test results
+- ✅ Users can now edit their display name from the profile screen
+
+
 ## 🚀 Features
 
 - 📊 Take a 50-question Big Five personality test (O, C, E, A, N)
@@ -58,6 +63,7 @@ Make sure you have Expo CLI installed: `npm install -g expo-cli`
 
 ```
 /screens       → All screen components (Test, Results, Welcome, etc.)
+/components    → Reusable components (NavBar, etc.)
 /src           → Firebase config and question logic
 /assets        → App images and icons
 /screenshots   → Screenshots for README

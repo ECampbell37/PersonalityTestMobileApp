@@ -6,6 +6,7 @@
  * File:    /screens/ProfileScreen.tsx
  ************************************************************/
 
+// React and React Native core imports
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -16,31 +17,46 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import { firebase } from '../src/firebase';
-import { Ionicons } from '@expo/vector-icons';
 
+// Firebase config
+import { firebase } from '../src/firebase';
+
+// Icon pack
+import { Ionicons } from '@expo/vector-icons';
 
 /**
  * ProfileScreen Component
  *
- * Displays user profile info (email), allows logout, and shows test history.
- * Connects to Firebase Auth and Firestore to load past quiz attempts in real time.
+ * Displays user's profile information (email, display name),
+ * allows user to log out or edit display name,
+ * and shows a list of previously completed personality tests.
  */
 const ProfileScreen = ({ navigation }: any) => {
+  // Local state for authenticated user and their test history
   const [user, setUser] = useState<any>(null);
   const [testHistory, setTestHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch authenticated user and test history on mount
+  // On component mount: check auth state and subscribe to test history
   useEffect(() => {
-    const unsubscribeAuth = firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-        // Subscribe to test history updates
+    const unsubscribeAuth = firebase.auth().onAuthStateChanged(async (authUser) => {
+      if (authUser) {
+        // Ensure user info is fully loaded
+        await authUser.reload();
+        const refreshedUser = firebase.auth().currentUser;
+
+        // Store basic user info in local state
+        setUser({
+          uid: refreshedUser?.uid,
+          email: refreshedUser?.email || 'No Email',
+          displayName: refreshedUser?.displayName || '',
+        });
+
+        // Subscribe to changes in user's test history
         const unsubscribeTests = firebase
           .firestore()
           .collection('users')
-          .doc(user.uid)
+          .doc(refreshedUser?.uid)
           .collection('tests')
           .orderBy('createdAt', 'desc')
           .onSnapshot(
@@ -57,16 +73,21 @@ const ProfileScreen = ({ navigation }: any) => {
               setLoading(false);
             }
           );
+
+        // Cleanup test history listener on unmount
         return () => unsubscribeTests();
       } else {
+        // Redirect unauthenticated users to Login screen
         navigation.navigate('Login');
         setLoading(false);
       }
     });
+
+    // Cleanup auth listener on unmount
     return () => unsubscribeAuth();
   }, [navigation]);
 
-  // Logout user and return to welcome screen
+  // Sign out the current user and navigate to welcome screen
   const handleLogout = () => {
     firebase
       .auth()
@@ -75,19 +96,92 @@ const ProfileScreen = ({ navigation }: any) => {
       .catch((error) => Alert.alert('Logout Error', error.message));
   };
 
-  // Render a single test card from history
+  // Deletes a specific test document for the logged-in user
+  const handleDeleteTest = (testId: string) => {
+    if (!user) return;
+
+    Alert.alert(
+      'Delete Test',
+      'Are you sure you want to delete this test result?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await firebase
+                .firestore()
+                .collection('users')
+                .doc(user.uid)
+                .collection('tests')
+                .doc(testId)
+                .delete();
+
+              // Optimistically update state without re-fetching
+              setTestHistory((prev) => prev.filter((t) => t.id !== testId));
+            } catch (error) {
+              console.error('Error deleting test:', error);
+              Alert.alert('Error', 'Failed to delete test.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  // Prompts the user to edit their display name and updates it in Firebase
+  const handleEditName = () => {
+    if (!user) return;
+
+    Alert.prompt(
+      'Edit Display Name',
+      'Enter your new display name:',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Save',
+          onPress: async (newName) => {
+            if (!newName) return;
+            try {
+              const currentUser = firebase.auth().currentUser;
+              if (currentUser) {
+                await currentUser.updateProfile({ displayName: newName });
+                await currentUser.reload();
+
+                const refreshedUser = firebase.auth().currentUser;
+                setUser({
+                  uid: refreshedUser?.uid,
+                  email: refreshedUser?.email || 'No Email',
+                  displayName: refreshedUser?.displayName || '',
+                });
+              }
+            } catch (error) {
+              console.error('Error updating display name:', error);
+              Alert.alert('Error', 'Failed to update name.');
+            }
+          },
+        },
+      ],
+      'plain-text',
+      user.displayName || ''
+    );
+  };
+
+  // Render a test history card with scores and delete button
   const renderTestHistoryItem = ({ item, index }: { item: any; index: number }) => {
     const date = item.createdAt
       ? item.createdAt.toDate().toLocaleDateString()
       : 'N/A';
+
     const { E, A, C, N, O } = item.scores;
 
     const traits = [
-      { label: 'O', value: O, color: '#9b59b6', emoji: '💡' }, // Openness
-      { label: 'C', value: C, color: '#3498db', emoji: '🛠️' }, // Conscientiousness
-      { label: 'E', value: E, color: '#f39c12', emoji: '🥳' }, // Extraversion
-      { label: 'A', value: A, color: '#2ecc71', emoji: '🤝' }, // Agreeableness
-      { label: 'N', value: N, color: '#e74c3c', emoji: '😥' }, // Neuroticism
+      { label: 'O', value: O, color: '#9b59b6', emoji: '💡' },
+      { label: 'C', value: C, color: '#3498db', emoji: '🛠️' },
+      { label: 'E', value: E, color: '#f39c12', emoji: '🥳' },
+      { label: 'A', value: A, color: '#2ecc71', emoji: '🤝' },
+      { label: 'N', value: N, color: '#e74c3c', emoji: '😥' },
     ];
 
     return (
@@ -97,7 +191,15 @@ const ProfileScreen = ({ navigation }: any) => {
           navigation.navigate('Results', { testScores: { E, A, C, N, O } })
         }
       >
-        <Text style={styles.testDate}>📅 {date}</Text>
+        {/* Test date and delete button */}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <Text style={styles.testDate}>📅 {date}</Text>
+          <TouchableOpacity onPress={() => handleDeleteTest(item.id)}>
+            <Ionicons name="trash-outline" size={20} color="#FF3B30" style={{ marginTop: -4 }} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Trait scores for the test */}
         <View style={styles.traitBadgeRow}>
           {traits.map((trait) => (
             <View
@@ -118,52 +220,55 @@ const ProfileScreen = ({ navigation }: any) => {
     );
   };
 
-  // Renders the profile section and optional loading/empty state
+  // Renders the header portion of the profile (user info + logout)
   const ListHeader = () => (
     <View style={styles.headerContainer}>
       <Text style={styles.title}>Account Page</Text>
 
-      {/* Authenticated user's email and logout option */}
       {user && (
         <View style={styles.profileCard}>
-          <Ionicons
-            name="person-circle-outline"
-            size={60}
-            color="#007AFF"
-            style={{ marginBottom: 10 }}
-          />
+          {/* Profile Icon */}
+          <Ionicons name="person-circle-outline" size={60} color="#007AFF" style={{ marginBottom: 10 }} />
+
+          {/* Editable Display Name */}
+          <TouchableOpacity
+            onPress={handleEditName}
+            style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}
+          >
+            <Text style={styles.displayNameText}>
+              {user.displayName || 'Enter Your Name!'}
+            </Text>
+            <Ionicons name="pencil-outline" size={18} color="#007AFF" style={{ marginLeft: 6 }} />
+          </TouchableOpacity>
+
+          {/* Email */}
           <Text style={styles.emailLabel}>Signed in as</Text>
           <Text style={styles.emailText}>{user.email}</Text>
 
+          {/* Logout Button */}
           <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <Ionicons
-              name="log-out-outline"
-              size={20}
-              color="#fff"
-              style={{ marginRight: 6 }}
-            />
+            <Ionicons name="log-out-outline" size={20} color="#fff" style={{ marginRight: 6 }} />
             <Text style={styles.logoutText}>Log Out</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      {/* Divider before test history section */}
+      {/* Divider and status indicators */}
       <View style={styles.sectionDivider}>
         <View style={styles.dividerLine} />
         <Text style={styles.dividerLabel}>🎉 Your Personality Tests</Text>
         <View style={styles.dividerLine} />
       </View>
 
-      {/* Loading or empty history message */}
-      {loading && (
-        <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 20 }} />
-      )}
+      {/* Show loading spinner or empty state message */}
+      {loading && <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 20 }} />}
       {!loading && testHistory.length === 0 && (
         <Text style={styles.noHistoryText}>No test history available.</Text>
       )}
     </View>
   );
 
+  // FlatList renders header and test history list
   return (
     <FlatList
       contentContainerStyle={{ ...styles.container, paddingBottom: 10 }}
@@ -175,6 +280,7 @@ const ProfileScreen = ({ navigation }: any) => {
   );
 };
 
+// Style definitions for layout and design
 const styles = StyleSheet.create({
   container: {
     padding: 20,
@@ -204,6 +310,11 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 25,
   },
+  displayNameText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#2C3E50',
+  },
   emailLabel: {
     fontSize: 14,
     color: '#555',
@@ -212,8 +323,8 @@ const styles = StyleSheet.create({
   emailText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
-    marginBottom: 16,
+    color: '#000000',
+    marginBottom: 8,
   },
   logoutButton: {
     flexDirection: 'row',
@@ -222,6 +333,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     alignItems: 'center',
+    marginTop: 8,
   },
   logoutText: {
     color: '#fff',
@@ -273,11 +385,11 @@ const styles = StyleSheet.create({
   traitBadgeRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    flexWrap: 'nowrap', // force one line
+    flexWrap: 'nowrap',
   },
   traitBadge: {
     width: 55,
-    aspectRatio: .8,
+    aspectRatio: 0.8,
     borderRadius: 12,
     backgroundColor: '#eee',
     alignItems: 'center',
